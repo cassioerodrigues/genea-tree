@@ -23,7 +23,16 @@ tests/          # pytest
 
 ## Rodando localmente
 
-A forma oficial será via Docker Compose (issue #2). Para desenvolvimento direto:
+Via Docker Compose (recomendado):
+
+```bash
+cp .env.example .env
+docker compose --env-file .env -f docker/docker-compose.yml up --build
+```
+
+A API fica em `http://localhost/health` (via Caddy).
+
+Sem Docker:
 
 ```bash
 python -m venv .venv && source .venv/bin/activate

@@ -19,6 +19,15 @@ doc/        # PRD e Technical Specification
 .github/    # workflows CI
 ```
 
+## Rodando localmente
+
+```bash
+cp .env.example .env
+docker compose --env-file .env -f docker/docker-compose.yml up --build
+```
+
+Acesse `http://localhost/health`.
+
 ## Status
 
 **Fase 1 em andamento** — fundação (setup, auth, CRUD pessoas/relacionamentos). Ver issues com label `phase-1`.

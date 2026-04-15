@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     app_name: str = "Genea Tree"
+    redis_url: str = "redis://redis:6379/0"
 
 
 settings = Settings()
