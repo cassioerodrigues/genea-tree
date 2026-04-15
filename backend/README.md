@@ -40,7 +40,11 @@ pip install -e ".[dev]"
 uvicorn app.main:app --reload
 ```
 
-`GET /health` deve retornar `{"status": "ok"}`.
+`GET /health` retorna `{"status": "ok", "version": "<app_version>"}`.
+
+## Configuração
+
+Variáveis via `.env` (ver `.env.example`): `APP_VERSION`, `ENVIRONMENT`, `LOG_LEVEL`, `CORS_ORIGINS` (CSV), `DATABASE_URL`, `REDIS_URL`. Logs são emitidos em JSON estruturado.
 
 ## Qualidade
 
