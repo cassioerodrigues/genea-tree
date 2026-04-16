@@ -17,6 +17,7 @@ dependencies = [
     "asyncpg>=0.29",
     "python-jose[cryptography]>=3.3",
     "passlib[bcrypt]>=1.7",
+    "bcrypt<5",
     "celery>=5.4",
     "redis>=5.0",
     "slowapi>=0.1.9",
