@@ -4,10 +4,17 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 
+from app.api.v1 import auth as auth_router
+from app.api.v1 import persons as persons_router
+from app.api.v1 import relationships as rel_router
 from app.core.config import settings
 from app.core.logging import configure_logging
+from app.core.rate_limit import limiter
 
 configure_logging(settings.log_level)
 logger = logging.getLogger(__name__)
@@ -28,6 +35,16 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 app = FastAPI(title=settings.app_name, version=settings.app_version, lifespan=lifespan)
 
+app.state.limiter = limiter
+
+
+def _rate_limit_handler(request: object, exc: RateLimitExceeded) -> JSONResponse:
+    return JSONResponse(status_code=429, content={"detail": "rate_limited"})
+
+
+app.add_exception_handler(RateLimitExceeded, _rate_limit_handler)  # type: ignore[arg-type]
+app.add_middleware(SlowAPIMiddleware)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
@@ -45,3 +62,9 @@ class HealthResponse(BaseModel):
 @app.get("/health", response_model=HealthResponse)
 def health() -> HealthResponse:
     return HealthResponse(status="ok", version=settings.app_version)
+
+
+app.include_router(auth_router.router, prefix="/api/v1")
+app.include_router(persons_router.tree_router, prefix="/api/v1")
+app.include_router(persons_router.person_router, prefix="/api/v1")
+app.include_router(rel_router.router, prefix="/api/v1")

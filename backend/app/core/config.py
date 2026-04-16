@@ -17,6 +17,15 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+asyncpg://genea:change-me@postgres:5432/genea"
     redis_url: str = "redis://redis:6379/0"
 
+    jwt_secret: str = "change-me"
+    jwt_algorithm: str = "HS256"
+    jwt_access_ttl_minutes: int = 15
+    jwt_refresh_ttl_days: int = 30
+    bcrypt_rounds: int = 12
+
+    rate_limit_per_minute: int = 60
+    auth_rate_limit_per_minute: int = 10
+
     @field_validator("cors_origins", mode="before")
     @classmethod
     def _split_csv(cls, v: object) -> object:

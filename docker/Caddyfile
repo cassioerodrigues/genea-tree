@@ -1,3 +1,18 @@
-{$CADDY_HOST:localhost}:80 {
+{
+    email {$CADDY_EMAIL:admin@example.com}
+}
+
+{$CADDY_HOST:localhost} {
+    # Security headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Content-Security-Policy "default-src 'self'"
+        -Server
+    }
+
     reverse_proxy api:8000
 }

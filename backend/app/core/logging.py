@@ -16,10 +16,29 @@ class JsonFormatter(logging.Formatter):
             payload["exc_info"] = self.formatException(record.exc_info)
         for key, value in record.__dict__.items():
             if key in {
-                "args", "asctime", "created", "exc_info", "exc_text", "filename",
-                "funcName", "levelname", "levelno", "lineno", "message", "module",
-                "msecs", "msg", "name", "pathname", "process", "processName",
-                "relativeCreated", "stack_info", "thread", "threadName", "taskName",
+                "args",
+                "asctime",
+                "created",
+                "exc_info",
+                "exc_text",
+                "filename",
+                "funcName",
+                "levelname",
+                "levelno",
+                "lineno",
+                "message",
+                "module",
+                "msecs",
+                "msg",
+                "name",
+                "pathname",
+                "process",
+                "processName",
+                "relativeCreated",
+                "stack_info",
+                "thread",
+                "threadName",
+                "taskName",
             }:
                 continue
             payload[key] = value
