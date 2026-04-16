@@ -57,7 +57,16 @@ docker compose --env-file .env -f docker/docker-compose.yml exec api \
 - **#3** Bootstrap FastAPI — `GET /health` retorna `{status, version}`, CORS configurável via env, logging estruturado em JSON e configuração via Pydantic Settings.
 - **#4** Camada de persistência — SQLAlchemy 2.0 async com asyncpg, `AsyncSessionLocal` + dependência `get_db`, Alembic configurado (async `env.py`, naming convention nas constraints).
 - **#5** Modelos core — `User`, `Tree`, `Person`, `Relationship` seguindo Tech Spec §4.1, com UNIQUE em `(tree_id, person_a_id, person_b_id, rel_type)`, CHECKs em `visibility` e `rel_type`, índices em FKs e migration inicial.
+- **#6** `POST /api/v1/auth/register` — cria conta com e-mail único e senha bcrypt (custo 12).
+- **#7** `POST /api/v1/auth/login` — autentica e emite par de tokens JWT (access 15 min, refresh 30 d).
+- **#8** `POST /api/v1/auth/refresh` — rotaciona refresh token com revogação do anterior (proteção a replay).
+- **#9** Middleware JWT (`get_current_user`) + `GET /api/v1/auth/me`. Rate limiting via slowapi (10 req/min auth, 60 req/min global).
+- **#10** CRUD Pessoas com filtros (`q`, `place`, `year_from`, `year_to`) e isolamento por árvore.
+- **#11** CRUD Relacionamentos com validação de tipo (`parent`/`spouse`), proteção contra auto-relacionamento e pessoa de outra árvore.
+- **#12** Suite de testes pytest-asyncio — 32 testes, 95% de cobertura (greenlet concurrency).
+- **#13** Workflow CI GitHub Actions — jobs `lint` (ruff), `test` (postgres+redis services) e `build` (docker build).
+- **#14** Dockerfile multi-stage com usuário não-root e HEALTHCHECK; Caddyfile com auto-TLS e cabeçalhos de segurança.
 
 ## Status
 
-**Fase 1 em andamento** — fundação (setup, auth, CRUD pessoas/relacionamentos). Issues concluídas: #1, #2, #3, #4, #5. Próximas: auth (#6–#9), CRUD (#10, #11), testes (#12), CI (#13), Dockerfile hardening (#14).
+**Fase 1 concluída** — autenticação JWT, CRUD de pessoas e relacionamentos, 32 testes com 95% de cobertura, CI e hardening de infra. Issues concluídas: #1–#14.
