@@ -10,6 +10,7 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 
 from app.api.v1 import auth as auth_router
+from app.api.v1 import persons as persons_router
 from app.core.config import settings
 from app.core.logging import configure_logging
 from app.core.rate_limit import limiter
@@ -63,3 +64,5 @@ def health() -> HealthResponse:
 
 
 app.include_router(auth_router.router, prefix="/api/v1")
+app.include_router(persons_router.tree_router, prefix="/api/v1")
+app.include_router(persons_router.person_router, prefix="/api/v1")
