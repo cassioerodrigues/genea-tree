@@ -12,9 +12,7 @@ class PersonNotFound(Exception):
     pass
 
 
-async def create_person(
-    session: AsyncSession, tree_id: uuid.UUID, data: PersonCreate
-) -> Person:
+async def create_person(session: AsyncSession, tree_id: uuid.UUID, data: PersonCreate) -> Person:
     person = Person(tree_id=tree_id, **data.model_dump())
     session.add(person)
     await session.commit()
@@ -56,9 +54,7 @@ async def get_person(
     return person
 
 
-async def update_person(
-    session: AsyncSession, person: Person, data: PersonUpdate
-) -> Person:
+async def update_person(session: AsyncSession, person: Person, data: PersonUpdate) -> Person:
     for key, value in data.model_dump(exclude_unset=True).items():
         setattr(person, key, value)
     await session.commit()

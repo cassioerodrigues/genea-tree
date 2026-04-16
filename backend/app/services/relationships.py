@@ -38,9 +38,7 @@ async def _ensure_same_tree(
         raise InvalidRelationship()
 
 
-async def create_relationship(
-    session: AsyncSession, data: RelationshipCreate
-) -> Relationship:
+async def create_relationship(session: AsyncSession, data: RelationshipCreate) -> Relationship:
     await _ensure_same_tree(session, data.tree_id, data.person_a_id, data.person_b_id)
     rel = Relationship(
         tree_id=data.tree_id,
@@ -61,9 +59,7 @@ async def create_relationship(
     return rel
 
 
-async def get_relationship(
-    session: AsyncSession, relationship_id: uuid.UUID
-) -> Relationship:
+async def get_relationship(session: AsyncSession, relationship_id: uuid.UUID) -> Relationship:
     rel = await session.get(Relationship, relationship_id)
     if rel is None:
         raise RelationshipNotFound()

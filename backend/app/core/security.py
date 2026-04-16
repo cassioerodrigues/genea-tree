@@ -43,9 +43,7 @@ def create_access_token(subject: str, expires_delta: timedelta | None = None) ->
     return _encode(subject, ACCESS_TYPE, delta)
 
 
-def create_refresh_token(
-    subject: str, expires_delta: timedelta | None = None
-) -> tuple[str, str]:
+def create_refresh_token(subject: str, expires_delta: timedelta | None = None) -> tuple[str, str]:
     delta = expires_delta or timedelta(days=settings.jwt_refresh_ttl_days)
     jti = uuid.uuid4().hex
     return _encode(subject, REFRESH_TYPE, delta, {"jti": jti}), jti

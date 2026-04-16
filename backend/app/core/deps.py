@@ -18,9 +18,7 @@ async def get_current_user(
     session: AsyncSession = Depends(get_db),
 ) -> User:
     if credentials is None or credentials.scheme.lower() != "bearer":
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="missing_credentials"
-        )
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="missing_credentials")
     try:
         payload = decode_token(credentials.credentials)
     except ValueError as exc:
@@ -28,9 +26,7 @@ async def get_current_user(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid_token"
         ) from exc
     if payload.get("type") != ACCESS_TYPE:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="wrong_token_type"
-        )
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="wrong_token_type")
     try:
         user_id = uuid.UUID(payload["sub"])
     except (KeyError, ValueError) as exc:
@@ -39,9 +35,7 @@ async def get_current_user(
         ) from exc
     user = await session.get(User, user_id)
     if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="user_not_found"
-        )
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="user_not_found")
     return user
 
 

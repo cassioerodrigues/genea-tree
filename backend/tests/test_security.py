@@ -1,4 +1,4 @@
-from datetime import UTC, datetime, timedelta
+from datetime import timedelta
 
 import pytest
 from jose import jwt
@@ -38,11 +38,11 @@ def test_refresh_token_round_trip() -> None:
 
 def test_decode_token_rejects_invalid_signature() -> None:
     bad = jwt.encode({"sub": "x"}, "other-secret", algorithm=settings.jwt_algorithm)
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         decode_token(bad)
 
 
 def test_access_token_expires() -> None:
     token = create_access_token("user-123", expires_delta=timedelta(seconds=-1))
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         decode_token(token)

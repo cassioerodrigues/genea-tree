@@ -22,12 +22,8 @@ from app.services.relationships import (
 router = APIRouter(prefix="/relationships", tags=["relationships"])
 
 
-async def _assert_tree_owner(
-    session: AsyncSession, user: User, tree_id: uuid.UUID
-) -> None:
-    tree = await session.scalar(
-        select(Tree).where(Tree.id == tree_id, Tree.owner_id == user.id)
-    )
+async def _assert_tree_owner(session: AsyncSession, user: User, tree_id: uuid.UUID) -> None:
+    tree = await session.scalar(select(Tree).where(Tree.id == tree_id, Tree.owner_id == user.id))
     if tree is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="tree_not_found")
 
